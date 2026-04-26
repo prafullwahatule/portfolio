@@ -4,17 +4,28 @@
   <title>Prafull Wahatule — Data Analyst</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Clash+Display:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-  <link rel="stylesheet" href="css/ionicons.min.css">
   <link rel="stylesheet" href="css/icomoon.css">
   <style>
     :root {
-      --bg:#070710; --bg2:#0d0d1a; --surface:#111122; --card:#16162a;
-      --border:rgba(255,255,255,0.07); --accent:#f6c90e; --accent2:#4e7fff;
-      --accent3:#ff6b6b; --text:#e2e2f0; --muted:#6e6e9a; --white:#ffffff;
-      --fd:'Syne',sans-serif; --fb:'Outfit',sans-serif;
-      --spring:cubic-bezier(0.34,1.56,0.64,1); --eout:cubic-bezier(0.16,1,0.3,1);
+      --bg: #0B0F14;
+      --bg2: #0f1419;
+      --surface: #141b22;
+      --card: #192028;
+      --border: rgba(0,200,150,0.1);
+      --border2: rgba(255,255,255,0.06);
+      --accent: #00C896;
+      --accent2: #00FFB2;
+      --gradient: linear-gradient(90deg, #00C896, #00FFB2);
+      --text: #FFFFFF;
+      --muted: #A0A0A0;
+      --dark-text: #0B0F14;
+      --fd: 'Syne', sans-serif;
+      --fb: 'Outfit', sans-serif;
+      --mono: 'DM Mono', monospace;
+      --spring: cubic-bezier(0.34,1.56,0.64,1);
+      --eout: cubic-bezier(0.16,1,0.3,1);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -24,94 +35,90 @@
     img{display:block;max-width:100%}
 
     /* CURSOR */
-    #cursor-dot{position:fixed;z-index:9999;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%)}
-    #cursor-ring{position:fixed;z-index:9998;width:36px;height:36px;border:1.5px solid rgba(246,201,14,0.4);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.3s var(--eout),height 0.3s var(--eout),border-color 0.3s}
+    #cursor-dot{position:fixed;z-index:9999;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s}
+    #cursor-ring{position:fixed;z-index:9998;width:36px;height:36px;border:1.5px solid rgba(0,200,150,0.4);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width 0.3s var(--eout),height 0.3s var(--eout),border-color 0.3s}
 
-    /* NOISE */
-    body::after{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");pointer-events:none}
+    /* NOISE OVERLAY */
+    body::after{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none}
 
     /* SCROLL BAR */
-    #scroll-bar{position:fixed;top:0;left:0;height:2px;z-index:10000;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 0.1s linear}
+    #scroll-bar{position:fixed;top:0;left:0;height:2px;z-index:10000;background:var(--gradient);width:0%;transition:width 0.1s linear}
 
     /* LOADER */
     #page-loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity 0.7s var(--eout),transform 0.7s var(--eout)}
     #page-loader.hidden{opacity:0;pointer-events:none;transform:scale(1.04)}
-    .loader-name{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--white);letter-spacing:-0.02em}
-    .loader-name span{color:var(--accent)}
+    .loader-name{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-0.02em}
+    .loader-name span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .loader-track{width:200px;height:2px;background:var(--surface);border-radius:2px;overflow:hidden}
-    .loader-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;width:0%;animation:ldrFill 1.6s var(--eout) forwards}
+    .loader-fill{height:100%;background:var(--gradient);border-radius:2px;width:0%;animation:ldrFill 1.6s var(--eout) forwards}
     @keyframes ldrFill{to{width:100%}}
 
     /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 6%;transition:background 0.4s,backdrop-filter 0.4s}
-    nav.scrolled{background:rgba(7,7,16,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-    .nav-logo{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--white);letter-spacing:-0.02em;position:relative}
-    .nav-logo span{color:var(--accent)}
-    .nav-logo::after{content:'';position:absolute;bottom:-3px;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.3s var(--eout)}
-    .nav-logo:hover::after{width:100%}
+    nav.scrolled{background:rgba(11,15,20,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--text);letter-spacing:-0.02em}
+    .nav-logo span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .nav-links{display:flex;gap:2.5rem}
-    .nav-links a{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);position:relative;padding-bottom:4px;transition:color 0.2s}
-    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:1px;background:var(--accent);transition:width 0.3s var(--eout)}
+    .nav-links a{font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);position:relative;padding-bottom:4px;transition:color 0.2s}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:1px;background:var(--gradient);transition:width 0.3s var(--eout)}
     .nav-links a:hover,.nav-links a.active{color:var(--accent)}
     .nav-links a:hover::after,.nav-links a.active::after{width:100%}
 
     /* HERO */
     #home-section{min-height:100vh;display:flex;align-items:center;padding:8rem 6% 5rem;position:relative;z-index:2}
     .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%}
-    .hero-eyebrow{display:inline-flex;align-items:center;gap:.75rem;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1.5rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 1.8s var(--eout) forwards}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:.75rem;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1.5rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 1.8s var(--eout) forwards}
     .eyebrow-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:dotPulse 2s 2s ease-in-out infinite}
-    @keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(246,201,14,0.6)}50%{box-shadow:0 0 0 8px rgba(246,201,14,0)}}
-    .hero-name{font-family:var(--fd);font-weight:800;font-size:clamp(3rem,6vw,5.2rem);line-height:.95;letter-spacing:-0.03em;color:var(--white);margin-bottom:.5rem;opacity:0;transform:translateY(30px);animation:fadeUp 0.8s 2s var(--eout) forwards}
-    .hero-name .hl{color:var(--accent);position:relative;display:inline-block}
-    .hero-name .hl::after{content:'';position:absolute;bottom:4px;left:0;right:0;height:4px;background:var(--accent);opacity:.3;border-radius:2px;transform:scaleX(0);transform-origin:left;animation:scaleIn 0.6s 2.8s var(--spring) forwards}
-    @keyframes scaleIn{to{transform:scaleX(1)}}
-    .hero-role{font-size:1.1rem;color:var(--muted);margin-bottom:1.5rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 2.2s var(--eout) forwards}
+    @keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,0.7)}50%{box-shadow:0 0 0 10px rgba(0,200,150,0)}}
+    .hero-name{font-family:var(--fd);font-weight:800;font-size:clamp(2.8rem,5.5vw,4.8rem);line-height:.95;letter-spacing:-0.03em;color:var(--text);margin-bottom:.6rem;opacity:0;transform:translateY(30px);animation:fadeUp 0.8s 2s var(--eout) forwards}
+    .hero-name .hl{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;display:inline-block}
+    .hero-role{font-size:1.05rem;color:var(--muted);margin-bottom:1.5rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 2.2s var(--eout) forwards}
     .hero-typing{min-height:2.5rem;margin-bottom:2rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 2.4s var(--eout) forwards}
-    #typing-animation{font-family:var(--fd);font-weight:700;font-size:clamp(1.1rem,2.5vw,1.55rem);color:var(--accent2)}
-    .cblink{display:inline-block;width:3px;height:1.2em;background:var(--accent);margin-left:3px;vertical-align:middle;border-radius:1px;animation:blink 0.8s infinite}
+    #typing-animation{font-family:var(--fd);font-weight:700;font-size:clamp(1rem,2.2vw,1.45rem);color:var(--accent)}
+    .cblink{display:inline-block;width:3px;height:1.1em;background:var(--accent);margin-left:3px;vertical-align:middle;border-radius:1px;animation:blink 0.8s infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
     .hero-stats{display:flex;gap:2.5rem;margin-bottom:2.5rem;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 2.6s var(--eout) forwards}
-    .hstat-num{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--white);line-height:1}
-    .hstat-num em{color:var(--accent);font-style:normal}
-    .hstat-lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+    .hstat-num{font-family:var(--fd);font-size:1.9rem;font-weight:800;color:var(--text);line-height:1}
+    .hstat-num em{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
+    .hstat-lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
     .hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:fadeUp 0.7s 2.8s var(--eout) forwards}
 
     /* HERO RIGHT */
     .hero-right{display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeScale 1s 2.2s var(--eout) forwards}
     @keyframes fadeScale{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
-    .hero-img-frame{position:relative;width:360px;height:460px;flex-shrink:0}
-    .hero-img-frame::before{content:'';position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,var(--accent2),var(--accent));transform:rotate(4deg);animation:frameFloat 6s ease-in-out infinite}
+    .hero-img-frame{position:relative;width:340px;height:440px;flex-shrink:0}
+    .hero-img-frame::before{content:'';position:absolute;inset:0;border-radius:24px;background:var(--gradient);transform:rotate(4deg);opacity:0.4;animation:frameFloat 6s ease-in-out infinite}
     @keyframes frameFloat{0%,100%{transform:rotate(4deg) translateY(0)}50%{transform:rotate(6deg) translateY(-10px)}}
-    .hero-img-inner{position:absolute;inset:0;border-radius:24px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);background:var(--surface);animation:imgFloat 6s ease-in-out infinite}
+    .hero-img-inner{position:absolute;inset:0;border-radius:24px;overflow:hidden;border:1px solid rgba(0,200,150,0.2);background:var(--surface);animation:imgFloat 6s ease-in-out infinite}
     @keyframes imgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
     .hero-img-inner img{width:100%;height:100%;object-fit:cover;object-position:top}
-    .hero-badge{position:absolute;bottom:-20px;right:-20px;background:var(--accent);color:var(--bg);border-radius:12px;padding:.9rem 1.2rem;font-family:var(--fd);font-weight:800;font-size:.85rem;box-shadow:0 12px 32px rgba(246,201,14,.4);animation:imgFloat 4s 1s ease-in-out infinite}
+    .hero-badge{position:absolute;bottom:-20px;right:-20px;background:var(--gradient);color:var(--dark-text);border-radius:12px;padding:.9rem 1.2rem;font-family:var(--fd);font-weight:800;font-size:.85rem;box-shadow:0 12px 32px rgba(0,200,150,.4);animation:imgFloat 4s 1s ease-in-out infinite}
     .hero-badge-num{font-size:1.4rem;line-height:1;display:block}
 
     /* SCROLL HINT */
-    .scroll-hint{position:absolute;bottom:2.5rem;left:6%;display:flex;align-items:center;gap:.8rem;font-size:.75rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;opacity:0;animation:fadeUp 1s 3.2s var(--eout) forwards}
+    .scroll-hint{position:absolute;bottom:2.5rem;left:6%;display:flex;align-items:center;gap:.8rem;font-size:.72rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;opacity:0;animation:fadeUp 1s 3.2s var(--eout) forwards}
     .scroll-mouse{width:22px;height:34px;border:1.5px solid var(--muted);border-radius:12px;position:relative;flex-shrink:0}
     .scroll-mouse::after{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:3px;height:6px;background:var(--muted);border-radius:2px;animation:scrollBounce 2s ease-in-out infinite}
     @keyframes scrollBounce{0%,100%{top:5px;opacity:1}80%{top:15px;opacity:0}}
     @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 
     /* BUTTONS */
-    .btn-p{background:var(--accent);color:var(--bg);padding:.9rem 2.2rem;border-radius:6px;font-family:var(--fd);font-weight:700;font-size:.9rem;letter-spacing:.04em;position:relative;overflow:hidden;display:inline-block;transition:transform 0.2s var(--spring),box-shadow 0.2s}
+    .btn-p{background:var(--gradient);color:var(--dark-text);padding:.9rem 2.2rem;border-radius:6px;font-family:var(--fd);font-weight:700;font-size:.9rem;letter-spacing:.04em;position:relative;overflow:hidden;display:inline-block;transition:transform 0.2s var(--spring),box-shadow 0.2s}
     .btn-p::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.2);transform:translateX(-100%) skewX(-15deg);transition:transform 0.4s var(--eout)}
-    .btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(246,201,14,.35)}
+    .btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,200,150,.35)}
     .btn-p:hover::after{transform:translateX(120%) skewX(-15deg)}
-    .btn-o{border:1px solid var(--border);color:var(--text);padding:.9rem 2.2rem;border-radius:6px;font-family:var(--fd);font-weight:600;font-size:.9rem;letter-spacing:.04em;display:inline-block;transition:border-color 0.2s,color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s}
-    .btn-o:hover{border-color:var(--accent2);color:var(--accent2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(78,127,255,.15)}
+    .btn-o{border:1px solid rgba(0,200,150,0.3);color:var(--text);padding:.9rem 2.2rem;border-radius:6px;font-family:var(--fd);font-weight:600;font-size:.9rem;letter-spacing:.04em;display:inline-block;transition:border-color 0.2s,color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s,background 0.2s}
+    .btn-o:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,200,150,0.05);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,200,150,.12)}
 
     /* CANVAS */
-    #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
+    #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
 
     /* SECTIONS */
     section{position:relative;z-index:2;padding:7rem 6%}
-    .section-tag{display:inline-block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:1rem;position:relative;padding-left:1.5rem}
-    .section-tag::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:18px;height:2px;background:var(--accent)}
-    .section-title{font-family:var(--fd);font-weight:800;font-size:clamp(2rem,4vw,3rem);color:var(--white);line-height:1.1;margin-bottom:1.5rem}
-    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);position:relative;z-index:2}
+    .section-tag{display:inline-block;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:1rem;position:relative;padding-left:1.5rem}
+    .section-tag::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:18px;height:2px;background:var(--gradient)}
+    .section-title{font-family:var(--fd);font-weight:800;font-size:clamp(2rem,4vw,3rem);color:var(--text);line-height:1.08;margin-bottom:1.5rem}
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,150,0.15),transparent);position:relative;z-index:2}
 
     /* REVEAL */
     [data-reveal]{opacity:0;transform:translateY(36px);transition:opacity 0.75s var(--eout),transform 0.75s var(--eout)}
@@ -126,109 +133,154 @@
     #about-section{background:var(--bg2)}
     .about-grid{display:grid;grid-template-columns:1.1fr 1.5fr;gap:5rem;align-items:start;margin-top:3rem}
     .about-photo-wrap{position:sticky;top:7rem;display:flex;flex-direction:column;gap:2rem}
-    .about-photo-box{position:relative;border-radius:16px;overflow:hidden;background:var(--surface);aspect-ratio:4/4}
+    .about-photo-box{position:relative;border-radius:16px;overflow:hidden;background:var(--surface);aspect-ratio:3/4}
     .about-photo-box img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.6s var(--eout)}
     .about-photo-box:hover img{transform:scale(1.04)}
-    .photo-border{position:absolute;inset:-8px;border-radius:20px;border:2px solid var(--accent);z-index:-1;transform:rotate(2deg);animation:rotBorder 8s ease-in-out infinite}
+    .photo-border{position:absolute;inset:-8px;border-radius:20px;border:2px solid var(--accent);z-index:-1;transform:rotate(2deg);opacity:0.4;animation:rotBorder 8s ease-in-out infinite}
     @keyframes rotBorder{0%,100%{transform:rotate(2deg)}50%{transform:rotate(-1deg)}}
     .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-    .fact-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;transition:border-color 0.2s,transform 0.2s var(--spring)}
-    .fact-chip:hover{border-color:var(--accent2);transform:translateY(-2px)}
-    .fact-lbl{font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .fact-chip{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:.65rem 1rem;transition:border-color 0.2s,transform 0.2s var(--spring)}
+    .fact-chip:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .fact-lbl{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
     .fact-val{font-size:.875rem;font-weight:600;color:var(--text);margin-top:.15rem}
     .about-content p{color:var(--muted);line-height:1.85;margin-bottom:1.25rem}
     .about-content p strong{color:var(--text)}
     .skills-section{margin-top:2.5rem}
-    .skills-ttl{font-family:var(--fd);font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
+    .skills-ttl{font-family:var(--fd);font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
     .skill-row{margin-bottom:1.4rem}
     .skill-meta{display:flex;justify-content:space-between;margin-bottom:.45rem}
     .skill-name{font-size:.875rem;font-weight:500;color:var(--text)}
     .skill-pct{font-size:.8rem;font-weight:700;font-family:var(--fd);color:var(--accent)}
-    .skill-track{height:5px;background:var(--card);border-radius:3px;overflow:hidden}
-    .skill-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 1.4s var(--eout)}
-    .tech-chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem}
-    .tc{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:.4rem 1rem;font-size:.78rem;font-weight:500;color:var(--muted);transition:border-color 0.2s,color 0.2s,transform 0.2s var(--spring),background 0.2s;cursor:default}
-    .tc:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(78,127,255,0.1);transform:translateY(-2px)}
+    .skill-track{height:4px;background:var(--card);border-radius:3px;overflow:hidden}
+    .skill-fill{height:100%;border-radius:3px;background:var(--gradient);width:0%;transition:width 1.4s var(--eout)}
+    .tech-chips{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:2rem}
+    .tc{background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:.35rem .95rem;font-size:.75rem;font-weight:500;color:var(--muted);transition:border-color 0.2s,color 0.2s,transform 0.2s var(--spring),background 0.2s;cursor:default}
+    .tc:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,200,150,0.08);transform:translateY(-2px)}
 
     /* RESUME */
-    #resume-section{}
     .resume-intro{max-width:640px;margin-bottom:3rem}
     .resume-intro p{color:var(--muted);line-height:1.8}
     .resume-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
-    .rcol-head{font-family:var(--fd);font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:2rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
-    .timeline{}
+    .rcol-head{font-family:var(--fd);font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
     .tl-item{position:relative;padding:0 0 2.5rem 2rem;border-left:1px solid var(--border)}
     .tl-item:last-child{border-left:1px solid transparent;padding-bottom:0}
-    .tl-dot{position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--accent2);border:2px solid var(--bg);transition:background 0.2s,transform 0.2s var(--spring)}
-    .tl-item:hover .tl-dot{background:var(--accent);transform:scale(1.5)}
-    .tl-date{font-size:.73rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent2);margin-bottom:.35rem}
-    .tl-title{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--white);margin-bottom:.2rem}
+    .tl-dot{position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);transition:transform 0.2s var(--spring)}
+    .tl-item:hover .tl-dot{transform:scale(1.6)}
+    .tl-date{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:.35rem}
+    .tl-title{font-family:var(--fd);font-weight:700;font-size:1rem;color:var(--text);margin-bottom:.2rem}
     .tl-org{font-size:.875rem;color:var(--muted);margin-bottom:.75rem}
     .tl-bullets{display:flex;flex-direction:column;gap:.35rem}
     .tl-bullets li{font-size:.85rem;color:var(--muted);line-height:1.55;padding-left:1rem;position:relative}
     .tl-bullets li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:.75rem}
     .resume-cta{text-align:center;margin-top:3.5rem}
 
-    /* PROJECTS */
+    /* =====================================================
+       PROJECTS SECTION — COMPLETELY REDESIGNED
+       Bento-grid layout with featured + smaller cards
+    ===================================================== */
     #project-section{background:var(--bg2)}
-    .proj-header{max-width:580px;margin-bottom:3.5rem}
-    .proj-header p{color:var(--muted)}
-    .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-    .proj-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.35s var(--spring),border-color 0.3s,box-shadow 0.3s;position:relative;perspective:800px}
-    .proj-card::before{content:'';position:absolute;inset:0;border-radius:14px;z-index:0;background:linear-gradient(135deg,rgba(78,127,255,0.08),rgba(246,201,14,0.04));opacity:0;transition:opacity 0.3s}
-    .proj-card:hover{transform:translateY(-8px) scale(1.01);border-color:rgba(246,201,14,0.3);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(246,201,14,0.1)}
-    .proj-card:hover::before{opacity:1}
-    .proj-thumb{width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--surface);position:relative;z-index:1}
-    .proj-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s var(--eout)}
-    .proj-card:hover .proj-thumb img{transform:scale(1.07)}
-    .proj-thumb-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(7,7,16,0.6))}
-    .proj-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;z-index:1;position:relative}
-    .proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
-    .proj-tag{background:rgba(78,127,255,0.12);color:var(--accent2);border-radius:4px;padding:.2rem .6rem;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
-    .proj-title{font-family:var(--fd);font-weight:700;font-size:1rem;color:var(--white);margin-bottom:.65rem;line-height:1.3;transition:color 0.2s}
-    .proj-card:hover .proj-title{color:var(--accent)}
-    .proj-desc{font-size:.85rem;color:var(--muted);line-height:1.6;flex:1}
-    .proj-footer{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .proj-link{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:600;color:var(--accent);letter-spacing:.05em;transition:gap 0.2s}
-    .proj-link svg{transition:transform 0.2s var(--spring)}
-    .proj-card:hover .proj-link{gap:.75rem}
-    .proj-card:hover .proj-link svg{transform:translate(3px,-3px)}
+    .proj-header{max-width:640px;margin-bottom:3.5rem}
+    .proj-header p{color:var(--muted);line-height:1.8;margin-top:.75rem}
+
+    /* Filter tabs */
+    .proj-filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .pf-btn{background:var(--card);border:1px solid var(--border2);color:var(--muted);border-radius:100px;padding:.4rem 1.1rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:all 0.2s;font-family:var(--fd)}
+    .pf-btn:hover,.pf-btn.active{background:rgba(0,200,150,0.1);border-color:var(--accent);color:var(--accent)}
+
+    /* Bento grid */
+    .proj-bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:auto;gap:1.25rem}
+
+    /* Featured card — spans 7 cols */
+    .pcard-feat{grid-column:span 7;background:var(--card);border:1px solid var(--border2);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.35s var(--spring),border-color 0.3s,box-shadow 0.3s;position:relative}
+    .pcard-feat:hover{transform:translateY(-6px);border-color:rgba(0,200,150,0.35);box-shadow:0 28px 64px rgba(0,0,0,.5),0 0 0 1px rgba(0,200,150,0.12)}
+
+    /* Small card — spans 5 cols */
+    .pcard-sm{grid-column:span 5;background:var(--card);border:1px solid var(--border2);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.35s var(--spring),border-color 0.3s,box-shadow 0.3s;position:relative}
+    .pcard-sm:hover{transform:translateY(-6px);border-color:rgba(0,200,150,0.35);box-shadow:0 28px 64px rgba(0,0,0,.5),0 0 0 1px rgba(0,200,150,0.12)}
+
+    /* Half cards */
+    .pcard-half{grid-column:span 4;background:var(--card);border:1px solid var(--border2);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.35s var(--spring),border-color 0.3s,box-shadow 0.3s;position:relative}
+    .pcard-half:hover{transform:translateY(-6px);border-color:rgba(0,200,150,0.35);box-shadow:0 28px 64px rgba(0,0,0,.5),0 0 0 1px rgba(0,200,150,0.12)}
+
+    /* Thumbnail */
+    .pc-thumb{width:100%;overflow:hidden;background:var(--surface);position:relative}
+    .pcard-feat .pc-thumb{aspect-ratio:16/7}
+    .pcard-sm .pc-thumb{aspect-ratio:16/9}
+    .pcard-half .pc-thumb{aspect-ratio:16/9}
+    .pc-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.55s var(--eout);filter:brightness(0.9)}
+    .pcard-feat:hover .pc-thumb img,.pcard-sm:hover .pc-thumb img,.pcard-half:hover .pc-thumb img{transform:scale(1.06);filter:brightness(1)}
+    .pc-thumb-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(25,32,40,0.85))}
+
+    /* Number watermark */
+    .pc-num{position:absolute;top:1rem;right:1.2rem;font-family:var(--fd);font-size:.7rem;font-weight:700;color:rgba(0,200,150,0.5);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+
+    /* Card body */
+    .pc-body{padding:1.5rem 1.6rem;flex:1;display:flex;flex-direction:column}
+    .pcard-feat .pc-body{padding:1.75rem 2rem}
+
+    /* Tags */
+    .pc-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
+    .pc-tag{background:rgba(0,200,150,0.1);color:var(--accent);border-radius:4px;padding:.18rem .6rem;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(0,200,150,0.2)}
+
+    /* Title */
+    .pc-title{font-family:var(--fd);font-weight:700;color:var(--text);line-height:1.25;margin-bottom:.65rem;transition:color 0.2s}
+    .pcard-feat .pc-title{font-size:1.2rem}
+    .pcard-sm .pc-title,.pcard-half .pc-title{font-size:.975rem}
+    .pcard-feat:hover .pc-title,.pcard-sm:hover .pc-title,.pcard-half:hover .pc-title{color:var(--accent)}
+
+    /* Desc */
+    .pc-desc{font-size:.84rem;color:var(--muted);line-height:1.65;flex:1}
+    .pcard-feat .pc-desc{font-size:.9rem}
+
+    /* Footer */
+    .pc-footer{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+    .pc-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;color:var(--accent);letter-spacing:.05em;font-family:var(--fd);transition:gap 0.2s}
+    .pc-link svg{transition:transform 0.2s var(--spring)}
+    .pcard-feat:hover .pc-link,.pcard-sm:hover .pc-link,.pcard-half:hover .pc-link{gap:.75rem}
+    .pcard-feat:hover .pc-link svg,.pcard-sm:hover .pc-link svg,.pcard-half:hover .pc-link svg{transform:translate(3px,-3px)}
+
+    /* Impact pill */
+    .pc-impact{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;color:var(--muted);font-family:var(--fd);font-weight:500}
+    .pc-impact-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:dotPulse 2.5s ease-in-out infinite}
+
+    /* Glowing border on hover */
+    .pcard-feat::before,.pcard-sm::before,.pcard-half::before{content:'';position:absolute;inset:-1px;border-radius:18px;z-index:-1;background:var(--gradient);opacity:0;transition:opacity 0.3s}
+    .pcard-feat:hover::before,.pcard-sm:hover::before,.pcard-half:hover::before{opacity:0.25}
 
     /* COUNTERS */
     #section-counter{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 6%;position:relative;z-index:2}
     .ctr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;text-align:center;margin-bottom:4rem}
-    .ctr-card{padding:2rem;background:var(--card);border-radius:12px;border:1px solid var(--border);transition:transform 0.3s var(--spring),border-color 0.3s,box-shadow 0.3s}
-    .ctr-card:hover{transform:translateY(-6px);border-color:rgba(246,201,14,0.3);box-shadow:0 16px 48px rgba(0,0,0,.4)}
-    .ctr-num{font-family:var(--fd);font-size:3.5rem;font-weight:800;color:var(--white);line-height:1}
-    .ctr-num em{color:var(--accent);font-style:normal}
-    .ctr-lbl{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.6rem}
-    .gh-cta{text-align:center;padding:3.5rem 2rem;background:linear-gradient(135deg,rgba(78,127,255,0.1),rgba(246,201,14,0.05));border-radius:16px;border:1px solid var(--border);position:relative;overflow:hidden}
-    .gh-cta::before{content:'';position:absolute;inset:-2px;border-radius:16px;z-index:0;background:linear-gradient(135deg,var(--accent2),var(--accent),var(--accent3),var(--accent2));background-size:300% 300%;animation:gradShift 6s ease-in-out infinite;opacity:.12}
+    .ctr-card{padding:2rem;background:var(--card);border-radius:12px;border:1px solid var(--border2);transition:transform 0.3s var(--spring),border-color 0.3s,box-shadow 0.3s}
+    .ctr-card:hover{transform:translateY(-6px);border-color:rgba(0,200,150,0.3);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+    .ctr-num{font-family:var(--fd);font-size:3.5rem;font-weight:800;color:var(--text);line-height:1}
+    .ctr-num em{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
+    .ctr-lbl{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.6rem}
+    .gh-cta{text-align:center;padding:3.5rem 2rem;background:linear-gradient(135deg,rgba(0,200,150,0.07),rgba(0,255,178,0.03));border-radius:16px;border:1px solid var(--border);position:relative;overflow:hidden}
+    .gh-cta::before{content:'';position:absolute;inset:-2px;border-radius:16px;z-index:0;background:var(--gradient);background-size:300% 300%;animation:gradShift 6s ease-in-out infinite;opacity:.1}
     @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-    .gh-cta h2{font-family:var(--fd);font-weight:800;font-size:1.8rem;color:var(--white);margin-bottom:.75rem;position:relative;z-index:1}
-    .gh-cta h2 span{color:var(--accent)}
+    .gh-cta h2{font-family:var(--fd);font-weight:800;font-size:1.8rem;color:var(--text);margin-bottom:.75rem;position:relative;z-index:1}
+    .gh-cta h2 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .gh-cta p{color:var(--muted);max-width:480px;margin:0 auto 1.5rem;position:relative;z-index:1}
 
     /* CONTACT */
-    #contact-section{}
     .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3rem}
     .contact-left p{color:var(--muted);line-height:1.8;margin-bottom:2rem}
     .contact-cards{display:flex;flex-direction:column;gap:1rem}
-    .ccard{display:flex;align-items:center;gap:1.25rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;transition:border-color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s}
-    .ccard:hover{border-color:var(--accent2);transform:translateX(4px);box-shadow:-4px 0 24px rgba(78,127,255,.12)}
-    .cicon{width:44px;height:44px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;transition:background 0.2s,border-color 0.2s}
-    .ccard:hover .cicon{background:rgba(78,127,255,0.15);border-color:var(--accent2)}
-    .clabel{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+    .ccard{display:flex;align-items:center;gap:1.25rem;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1.1rem 1.4rem;transition:border-color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s}
+    .ccard:hover{border-color:var(--accent);transform:translateX(4px);box-shadow:-4px 0 24px rgba(0,200,150,.1)}
+    .cicon{width:44px;height:44px;border-radius:10px;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;transition:background 0.2s,border-color 0.2s}
+    .ccard:hover .cicon{background:rgba(0,200,150,0.12);border-color:var(--accent)}
+    .clabel{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
     .cval{font-weight:600;font-size:.95rem;color:var(--text);transition:color 0.2s}
-    .ccard:hover .cval{color:var(--accent2)}
+    .ccard:hover .cval{color:var(--accent)}
     .social-row{display:flex;gap:.85rem;margin-top:2rem}
-    .sbtn{width:46px;height:46px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;transition:all 0.2s var(--spring)}
-    .sbtn:hover{background:rgba(246,201,14,0.12);border-color:var(--accent);color:var(--accent);transform:translateY(-4px) rotate(-5deg)}
-    .crcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;height:100%}
-    .crcard h3{font-family:var(--fd);font-weight:800;font-size:1.35rem;color:var(--white);margin-bottom:.6rem}
+    .sbtn{width:46px;height:46px;border-radius:10px;background:var(--card);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;transition:all 0.2s var(--spring)}
+    .sbtn:hover{background:rgba(0,200,150,0.12);border-color:var(--accent);color:var(--accent);transform:translateY(-4px) rotate(-5deg)}
+    .crcard{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:2.5rem;height:100%}
+    .crcard h3{font-family:var(--fd);font-weight:800;font-size:1.35rem;color:var(--text);margin-bottom:.6rem}
     .crcard p{color:var(--muted);font-size:.9rem;margin-bottom:1.75rem}
     .quick-links{display:flex;flex-direction:column;gap:.85rem}
-    .qlink{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;transition:border-color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s}
+    .qlink{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1rem 1.25rem;transition:border-color 0.2s,transform 0.2s var(--spring),box-shadow 0.2s}
     .qlink:hover{border-color:var(--accent);transform:translateX(4px);box-shadow:0 4px 24px rgba(0,0,0,.3)}
     .qlink-l{display:flex;align-items:center;gap:.85rem;font-weight:500;color:var(--text)}
     .qlink-l span{font-size:1.15rem}
@@ -239,11 +291,16 @@
     footer{background:var(--surface);border-top:1px solid var(--border);padding:2.5rem 6%;text-align:center;color:var(--muted);font-size:.85rem;position:relative;z-index:2}
     .footer-inner{display:flex;align-items:center;justify-content:space-between}
     .footer-links{display:flex;gap:1.5rem}
-    .footer-links a{color:var(--muted);transition:color 0.2s;font-size:.8rem}
+    .footer-links a{color:var(--muted);transition:color 0.2s;font-size:.78rem}
     .footer-links a:hover{color:var(--accent)}
-    .acc{color:var(--accent)}
+    .acc{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
     /* RESPONSIVE */
+    @media(max-width:1100px){
+      .pcard-feat{grid-column:span 12}
+      .pcard-sm{grid-column:span 6}
+      .pcard-half{grid-column:span 6}
+    }
     @media(max-width:1024px){
       .hero-inner{grid-template-columns:1fr}
       .hero-right{display:none}
@@ -254,7 +311,7 @@
       .contact-grid{grid-template-columns:1fr}
     }
     @media(max-width:768px){
-      .proj-grid{grid-template-columns:1fr}
+      .pcard-feat,.pcard-sm,.pcard-half{grid-column:span 12}
       .ctr-grid{grid-template-columns:1fr}
       .nav-links{display:none}
       section{padding:5rem 5%}
@@ -395,67 +452,165 @@
 
 <div class="divider"></div>
 
+<!-- ===================== PROJECTS (BENTO REDESIGN) ===================== -->
 <section id="project-section">
   <div class="proj-header" data-reveal>
     <div class="section-tag">Work</div>
     <h2 class="section-title">Featured Projects</h2>
-    <p>End-to-end Data Analytics &amp; BI projects built using SQL, Python, Power BI and Excel &mdash; focusing on real-world business problems, data-driven insights, and executive-level dashboards.</p>
+    <p>End-to-end Data Analytics &amp; BI projects built using SQL, Python, Power BI and Excel — focusing on real-world business problems, data-driven insights, and executive-level dashboards.</p>
   </div>
-  <div class="proj-grid">
-    <a href="https://github.com/prafullwahatule/BI-Amazon-Sale-Report" target="_blank" class="proj-card" data-reveal data-reveal-delay="1">
-      <div class="proj-thumb"><img src="images/Amazon_1.png" alt="Amazon Sales"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">Power BI</span><span class="proj-tag">DAX</span><span class="proj-tag">Power Query</span></div>
-        <div class="proj-title">Amazon Sales Performance Dashboard</div>
-        <div class="proj-desc">Interactive Power BI dashboard using DAX and Power Query to analyze sales trends, customer behavior, revenue growth, and product performance.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+  <div class="proj-filters" data-reveal data-reveal-delay="1">
+    <button class="pf-btn active" data-filter="all">All Projects</button>
+    <button class="pf-btn" data-filter="powerbi">Power BI</button>
+    <button class="pf-btn" data-filter="excel">Excel</button>
+    <button class="pf-btn" data-filter="sql">SQL</button>
+    <button class="pf-btn" data-filter="python">Python</button>
+  </div>
+
+  <div class="proj-bento">
+
+    <!-- ROW 1: Featured (7) + Small (5) -->
+    <a href="https://github.com/prafullwahatule/BI-Amazon-Sale-Report" target="_blank"
+       class="pcard-feat" data-reveal data-reveal-delay="1" data-cat="powerbi">
+      <div class="pc-thumb">
+        <img src="images/Amazon_1.png" alt="Amazon Sales Dashboard">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">01</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">Power BI</span>
+          <span class="pc-tag">DAX</span>
+          <span class="pc-tag">Power Query</span>
+        </div>
+        <div class="pc-title">Amazon Sales Performance Dashboard</div>
+        <div class="pc-desc">Interactive Power BI dashboard using DAX and Power Query to analyze sales trends, customer behavior, revenue growth, and product performance across multiple dimensions.</div>
+        <div class="pc-footer">
+          <div class="pc-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+          <div class="pc-impact"><span class="pc-impact-dot"></span>Sales Analytics</div>
+        </div>
       </div>
     </a>
-    <a href="https://github.com/prafullwahatule/BI-Seoul-Bike-Analysis" target="_blank" class="proj-card" data-reveal data-reveal-delay="2">
-      <div class="proj-thumb"><img src="images/Seoul_1.png" alt="Seoul Bike"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">Power BI</span><span class="proj-tag">EDA</span><span class="proj-tag">Urban Analytics</span></div>
-        <div class="proj-title">Seoul Bike Rental Demand Analysis</div>
-        <div class="proj-desc">Data-driven dashboard uncovering seasonal demand patterns, peak hours and weather impact to support urban mobility planning.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+    <a href="https://github.com/prafullwahatule/BI-Seoul-Bike-Analysis" target="_blank"
+       class="pcard-sm" data-reveal data-reveal-delay="2" data-cat="powerbi">
+      <div class="pc-thumb">
+        <img src="images/Seoul_1.png" alt="Seoul Bike Analysis">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">02</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">Power BI</span>
+          <span class="pc-tag">EDA</span>
+          <span class="pc-tag">Urban</span>
+        </div>
+        <div class="pc-title">Seoul Bike Rental Demand Analysis</div>
+        <div class="pc-desc">Uncovering seasonal demand patterns, peak hours and weather impact to support urban mobility planning decisions.</div>
+        <div class="pc-footer">
+          <div class="pc-link">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+          <div class="pc-impact"><span class="pc-impact-dot"></span>Urban Analytics</div>
+        </div>
       </div>
     </a>
-    <a href="https://github.com/prafullwahatule/BI-Fecom-Inc-Report" target="_blank" class="proj-card" data-reveal data-reveal-delay="3">
-      <div class="proj-thumb"><img src="images/Fecom_1.png" alt="Fecom Inc"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">Power BI</span><span class="proj-tag">Executive</span><span class="proj-tag">7-Page</span></div>
-        <div class="proj-title">Fecom Inc Sales &amp; Customer Analytics</div>
-        <div class="proj-desc">7-page executive Power BI dashboard analyzing sales, customer reviews, geographic insights, vendor metrics and profitability trends.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+    <!-- ROW 2: Small (5) + Featured (7) -->
+    <a href="https://github.com/prafullwahatule/BI-Hotel-Booking-Analysis" target="_blank"
+       class="pcard-sm" data-reveal data-reveal-delay="1" data-cat="powerbi">
+      <div class="pc-thumb">
+        <img src="images/Hotel_1.png" alt="Hotel Booking Analytics">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">04</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">Power BI</span>
+          <span class="pc-tag">Segmentation</span>
+        </div>
+        <div class="pc-title">Hotel Booking Analytics Dashboard</div>
+        <div class="pc-desc">Multi-page dashboard covering booking trends, cancellation patterns, customer segmentation, and room utilization.</div>
+        <div class="pc-footer">
+          <div class="pc-link">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+          <div class="pc-impact"><span class="pc-impact-dot"></span>Hospitality</div>
+        </div>
       </div>
     </a>
-    <a href="https://github.com/prafullwahatule/BI-Hotel-Booking-Analysis" target="_blank" class="proj-card" data-reveal data-reveal-delay="1">
-      <div class="proj-thumb"><img src="images/Hotel_1.png" alt="Hotel Booking"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">Power BI</span><span class="proj-tag">Segmentation</span><span class="proj-tag">Trends</span></div>
-        <div class="proj-title">Hotel Booking Analytics Dashboard</div>
-        <div class="proj-desc">Multi-page Power BI dashboard covering booking trends, cancellation patterns, customer segmentation, room utilization, and distribution channels.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+    <a href="https://github.com/prafullwahatule/BI-Fecom-Inc-Report" target="_blank"
+       class="pcard-feat" data-reveal data-reveal-delay="2" data-cat="powerbi">
+      <div class="pc-thumb">
+        <img src="images/Fecom_1.png" alt="Fecom Inc Dashboard">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">03</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">Power BI</span>
+          <span class="pc-tag">Executive</span>
+          <span class="pc-tag">7-Page Report</span>
+        </div>
+        <div class="pc-title">Fecom Inc Sales &amp; Customer Analytics</div>
+        <div class="pc-desc">7-page executive Power BI dashboard analyzing sales, customer reviews, geographic insights, vendor metrics and profitability trends across the full business pipeline.</div>
+        <div class="pc-footer">
+          <div class="pc-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+          <div class="pc-impact"><span class="pc-impact-dot"></span>Executive-level Dashboard</div>
+        </div>
       </div>
     </a>
-    <a href="https://github.com/prafullwahatule/Emp_Dashboard" target="_blank" class="proj-card" data-reveal data-reveal-delay="2">
-      <div class="proj-thumb"><img src="images/Employee_1.jpg" alt="HR Analytics"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">Excel</span><span class="proj-tag">HR Analytics</span><span class="proj-tag">Pivot Tables</span></div>
-        <div class="proj-title">Employee Performance &amp; HR Analytics</div>
-        <div class="proj-desc">Interactive Excel HR dashboard using Pivot Tables, Charts, Lookups and Slicers to analyze attrition, salary distribution and performance metrics.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+    <!-- ROW 3: Three halves -->
+    <a href="https://github.com/prafullwahatule/Emp_Dashboard" target="_blank"
+       class="pcard-half" data-reveal data-reveal-delay="1" data-cat="excel">
+      <div class="pc-thumb">
+        <img src="images/Employee_1.jpg" alt="HR Analytics">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">05</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">Excel</span>
+          <span class="pc-tag">HR Analytics</span>
+        </div>
+        <div class="pc-title">Employee Performance &amp; HR Analytics</div>
+        <div class="pc-desc">Interactive Excel HR dashboard using Pivot Tables, Charts, Lookups and Slicers to analyze attrition and performance metrics.</div>
+        <div class="pc-footer">
+          <div class="pc-link">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        </div>
       </div>
     </a>
-    <a href="https://github.com/prafullwahatule/HotelManagementSystem" target="_blank" class="proj-card" data-reveal data-reveal-delay="3">
-      <div class="proj-thumb"><img src="images/Hotel_Management_1.png" alt="Hotel SQL"><div class="proj-thumb-ov"></div></div>
-      <div class="proj-body">
-        <div class="proj-tags"><span class="proj-tag">MySQL</span><span class="proj-tag">Schema Design</span><span class="proj-tag">SQL Analytics</span></div>
-        <div class="proj-title">Hotel Management System &mdash; SQL</div>
-        <div class="proj-desc">Complete relational database schema in MySQL with optimized SQL queries to analyze bookings, revenue, occupancy, and operational performance.</div>
-        <div class="proj-footer"><div class="proj-link">View on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div></div>
+
+    <a href="https://github.com/prafullwahatule/HotelManagementSystem" target="_blank"
+       class="pcard-half" data-reveal data-reveal-delay="2" data-cat="sql">
+      <div class="pc-thumb">
+        <img src="images/Hotel_Management_1.png" alt="Hotel SQL">
+        <div class="pc-thumb-ov"></div>
+        <span class="pc-num">06</span>
+      </div>
+      <div class="pc-body">
+        <div class="pc-tags">
+          <span class="pc-tag">MySQL</span>
+          <span class="pc-tag">Schema Design</span>
+        </div>
+        <div class="pc-title">Hotel Management System — SQL</div>
+        <div class="pc-desc">Complete relational database schema with optimized queries to analyze bookings, revenue, and operational performance.</div>
+        <div class="pc-footer">
+          <div class="pc-link">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        </div>
       </div>
     </a>
+
+    <!-- More Projects CTA card -->
+    <a href="https://github.com/prafullwahatule" target="_blank"
+       class="pcard-half" data-reveal data-reveal-delay="3" style="background:linear-gradient(135deg,rgba(0,200,150,0.08),rgba(0,255,178,0.04));border-color:rgba(0,200,150,0.2);align-items:center;justify-content:center;text-align:center;min-height:280px">
+      <div style="padding:2rem">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(0,200,150,0.12);border:1px solid rgba(0,200,150,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.4rem">+</div>
+        <div style="font-family:var(--fd);font-weight:700;font-size:1.1rem;color:var(--text);margin-bottom:.5rem">More Projects</div>
+        <div style="font-size:.84rem;color:var(--muted);margin-bottom:1.5rem">Explore all my data projects, SQL work and dashboards on GitHub</div>
+        <div class="pc-link" style="justify-content:center">Visit GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -481,11 +636,11 @@
   </div>
   <div class="contact-grid">
     <div data-reveal data-reveal-delay="1">
-      <p>Open to data analyst roles, freelance analytics projects and collaborations. Feel free to reach out &mdash; I typically respond within 24 hours.</p>
+      <p>Open to data analyst roles, freelance analytics projects and collaborations. Feel free to reach out — I typically respond within 24 hours.</p>
       <div class="contact-cards">
-        <div class="ccard"><div class="cicon">&#128205;</div><div><div class="clabel">Location</div><div class="cval">Pune, Maharashtra, India</div></div></div>
-        <a href="tel:+917875789496" class="ccard"><div class="cicon">&#128222;</div><div><div class="clabel">Phone</div><div class="cval">+91 7875789496</div></div></a>
-        <a href="mailto:prafullwahatule@gmail.com" class="ccard"><div class="cicon">&#9993;&#65039;</div><div><div class="clabel">Email</div><div class="cval">prafullwahatule@gmail.com</div></div></a>
+        <div class="ccard"><div class="cicon">📍</div><div><div class="clabel">Location</div><div class="cval">Pune, Maharashtra, India</div></div></div>
+        <a href="tel:+917875789496" class="ccard"><div class="cicon">📞</div><div><div class="clabel">Phone</div><div class="cval">+91 7875789496</div></div></a>
+        <a href="mailto:prafullwahatule@gmail.com" class="ccard"><div class="cicon">✉️</div><div><div class="clabel">Email</div><div class="cval">prafullwahatule@gmail.com</div></div></a>
       </div>
       <div class="social-row">
         <a href="https://www.linkedin.com/in/prafullwahatule/" target="_blank" class="sbtn" title="LinkedIn"><span class="icon-linkedin"></span></a>
@@ -498,9 +653,9 @@
         <h3>Quick Access</h3>
         <p>Find my work and connect with me across professional platforms.</p>
         <div class="quick-links">
-          <a href="https://github.com/prafullwahatule" target="_blank" class="qlink"><div class="qlink-l"><span>&#129305;</span>View GitHub Portfolio</div><span class="qlink-arr">&#8594;</span></a>
-          <a href="https://www.linkedin.com/in/prafullwahatule/" target="_blank" class="qlink"><div class="qlink-l"><span>&#128188;</span>Connect on LinkedIn</div><span class="qlink-arr">&#8594;</span></a>
-          <a href="CV/PrafullWahatule_6MOE_Data_Analyst.pdf" target="_blank" class="qlink"><div class="qlink-l"><span>&#128196;</span>Download My CV</div><span class="qlink-arr">&#8594;</span></a>
+          <a href="https://github.com/prafullwahatule" target="_blank" class="qlink"><div class="qlink-l"><span>🤙</span>View GitHub Portfolio</div><span class="qlink-arr">→</span></a>
+          <a href="https://www.linkedin.com/in/prafullwahatule/" target="_blank" class="qlink"><div class="qlink-l"><span>💼</span>Connect on LinkedIn</div><span class="qlink-arr">→</span></a>
+          <a href="CV/PrafullWahatule_6MOE_Data_Analyst.pdf" target="_blank" class="qlink"><div class="qlink-l"><span>📄</span>Download My CV</div><span class="qlink-arr">→</span></a>
         </div>
       </div>
     </div>
@@ -530,8 +685,8 @@ let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function animC(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animC)})();
 document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.width='54px';ring.style.height='54px';ring.style.borderColor='rgba(246,201,14,0.7)'});
-  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(246,201,14,0.4)'});
+  el.addEventListener('mouseenter',()=>{ring.style.width='54px';ring.style.height='54px';ring.style.borderColor='rgba(0,200,150,0.7)'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(0,200,150,0.4)'});
 });
 
 /* SCROLL PROGRESS */
@@ -546,7 +701,6 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scr
 
 /* ACTIVE NAV */
 const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nav-links a[data-section]');
-new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)nls.forEach(a=>a.classList.toggle('active',a.dataset.section===e.target.id))})},{threshold:0.4}).observe;
 secs.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)nls.forEach(a=>a.classList.toggle('active',a.dataset.section===e.target.id))})},{threshold:0.4}).observe(s));
 
 /* ANIMATED PARTICLE BG */
@@ -555,12 +709,12 @@ secs.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIn
   let W,H;
   function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
   resize();window.addEventListener('resize',resize);
-  const pts=Array.from({length:55},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.5+0.3,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3,col:Math.random()>.6?'#f6c90e':'#4e7fff',a:Math.random()*.5+.1}));
+  const pts=Array.from({length:50},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.4+0.3,dx:(Math.random()-.5)*.28,dy:(Math.random()-.5)*.28,col:Math.random()>.5?'#00C896':'#00FFB2',a:Math.random()*.45+.08}));
   (function draw(){
     ctx.clearRect(0,0,W,H);
     pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.col;ctx.globalAlpha=p.a;ctx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>W)p.dx*=-1;if(p.y<0||p.y>H)p.dy*=-1});
     ctx.globalAlpha=1;
-    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<130){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(78,127,255,${(1-d/130)*.15})`;ctx.lineWidth=.5;ctx.stroke()}}
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,200,150,${(1-d/120)*.12})`;ctx.lineWidth=.5;ctx.stroke()}}
     requestAnimationFrame(draw);
   })();
 })();
@@ -574,8 +728,7 @@ setTimeout(type,2000);
 
 /* SCROLL REVEAL */
 const revs=document.querySelectorAll('[data-reveal]');
-new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed')}})},{threshold:0.1}).observe;
-revs.forEach(r=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed')}})},{threshold:0.1}).observe(r));
+revs.forEach(r=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed')}})},{threshold:0.08}).observe(r));
 
 /* SKILL BARS */
 document.querySelectorAll('.skill-fill').forEach(f=>{
@@ -597,15 +750,25 @@ document.querySelectorAll('.btn-p,.btn-o').forEach(b=>{
   b.addEventListener('mouseleave',()=>{b.style.transform=''});
 });
 
-/* CARD TILT */
-document.querySelectorAll('.proj-card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`translateY(-8px) scale(1.01) rotateY(${x*6}deg) rotateX(${-y*4}deg)`});
-  card.addEventListener('mouseleave',()=>{card.style.transform=''});
+/* PROJECT FILTER */
+const pfBtns=document.querySelectorAll('.pf-btn');
+const projCards=document.querySelectorAll('.proj-bento [data-cat]');
+pfBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    pfBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    projCards.forEach(c=>{
+      if(f==='all'||c.dataset.cat===f){c.style.opacity='1';c.style.transform='';c.style.pointerEvents=''}
+      else{c.style.opacity='0.25';c.style.transform='scale(0.97)';c.style.pointerEvents='none'}
+    });
+  });
 });
 
-/* STAGGERED CARD REVEAL */
-document.querySelectorAll('[data-reveal]').forEach((el,i)=>{
-  new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('revealed')})},{threshold:0.08}).observe(el);
+/* CARD TILT */
+document.querySelectorAll('.pcard-feat,.pcard-sm,.pcard-half').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`translateY(-6px) scale(1.01) rotateY(${x*5}deg) rotateX(${-y*3}deg)`});
+  card.addEventListener('mouseleave',()=>{card.style.transform=''});
 });
 </script>
 </body>
